@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -165,6 +165,11 @@ vim.o.scrolloff = 10
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
 vim.o.confirm = true
+
+vim.opt.tabstop = 2
+vim.opt.smartindent = true
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -403,6 +408,20 @@ require('lazy').setup({
 
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
+      local function find_command()
+        if 1 == vim.fn.executable 'rg' then
+          return { 'rg', '--files', '--color', 'never', '-g', '!.git' }
+        elseif 1 == vim.fn.executable 'fd' then
+          return { 'fd', '--type', 'f', '--color', 'never', '-E', '.git' }
+        elseif 1 == vim.fn.executable 'fdfind' then
+          return { 'fdfind', '--type', 'f', '--color', 'never', '-E', '.git' }
+        elseif 1 == vim.fn.executable 'find' and vim.fn.has 'win32' == 0 then
+          return { 'find', '.', '-type', 'f' }
+        elseif 1 == vim.fn.executable 'where' then
+          return { 'where', '/r', '.', '*' }
+        end
+      end
+
       require('telescope').setup {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
@@ -412,7 +431,12 @@ require('lazy').setup({
         --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
         --   },
         -- },
-        -- pickers = {}
+        pickers = {
+          find_files = {
+            find_command = find_command,
+            hidden = true,
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),

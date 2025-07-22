@@ -194,6 +194,8 @@ vim.keymap.set('n', '<leader>cf', ':let @+ = expand("%:t")<CR>', { desc = 'Copy 
 -- Copy full file path to clipboard
 vim.keymap.set('n', '<leader>cp', ':let @+ = expand("%:p")<CR>', { desc = ' Copy full file path to clipboard', silent = true })
 
+vim.keymap.set('n', '<C-f>', '<cmd>silent !tmux neww tmux-sessionizer<CR>', { desc = 'Launch tmux-sessionaizer script' })
+
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
 -- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')

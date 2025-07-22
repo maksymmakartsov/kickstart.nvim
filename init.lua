@@ -190,10 +190,9 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- Copy file name to clipboard
-vim.keymap.set('n', '<leader>fy', ':let @+ = expand("%:t")<CR>', { desc = 'Copy file name to clipboard' silent = true })
+vim.keymap.set('n', '<leader>cf', ':let @+ = expand("%:t")<CR>', { desc = 'Copy file name to clipboard', silent = true })
 -- Copy full file path to clipboard
-vim.keymap.set('n', '<leader>fp', ':let @+ = expand("%:p")<CR>', { desc = ' Copy full file path to clipboard', silent = true })
-
+vim.keymap.set('n', '<leader>cp', ':let @+ = expand("%:p")<CR>', { desc = ' Copy full file path to clipboard', silent = true })
 
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')

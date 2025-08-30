@@ -726,6 +726,7 @@ require('lazy').setup({
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
+        cssls = {},
         bashls = {},
         lua_ls = {
           -- cmd = { ... },
@@ -740,6 +741,13 @@ require('lazy').setup({
               -- diagnostics = { disable = { 'missing-fields' } },
             },
           },
+        },
+        angularls = {
+          -- Ensure that for HTML files,
+          -- this server is only activated if an `angular.json` file is found
+          -- in the project's root. This prevents it from taking over
+          -- regular HTML files in non-Angular projects.
+          root_dir = require('lspconfig.util').root_pattern 'angular.json',
         },
       }
 
@@ -759,6 +767,8 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'prettierd',
+        'eslint_d',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -800,9 +810,18 @@ require('lazy').setup({
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
         local disable_filetypes = { c = true, cpp = true }
+
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
-        else
+        end
+
+        local prettier_config = vim.fs.find({ '.prettierrc', '.prettierrc.json', '.prettierrc.js' }, {
+          upward = true,
+          stop = vim.loop.os_homedir(),
+          path = vim.api.nvim_buf_get_name(bufnr),
+        })[1]
+
+        if prettier_config then
           return {
             timeout_ms = 500,
             lsp_format = 'fallback',
@@ -816,6 +835,18 @@ require('lazy').setup({
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        -- Add these lines for frontend formatting
+        javascript = { 'prettierd' },
+        typescript = { 'prettierd' },
+        javascriptreact = { 'prettierd' },
+        typescriptreact = { 'prettierd' },
+        vue = { 'prettierd' },
+        css = { 'prettierd' },
+        scss = { 'prettierd' },
+        html = { 'prettierd' },
+        json = { 'prettierd' },
+        yaml = { 'prettierd' },
+        markdown = { 'prettierd' },
       },
     },
   },
@@ -897,7 +928,7 @@ require('lazy').setup({
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev' },
+        default = { 'lsp', 'buffer', 'path', 'snippets', 'lazydev' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
         },
@@ -1024,6 +1055,7 @@ require('lazy').setup({
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
   require 'mmakart.plugins.fugitive',
   require 'mmakart.plugins.undotree',
+  require 'mmakart.plugins.autotag',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.

@@ -1,5 +1,17 @@
 return {
   {
+    "christoomey/vim-tmux-navigator",
+    lazy = false,
+    cmd = {
+      "TmuxNavigateLeft",
+      "TmuxNavigateDown",
+      "TmuxNavigateUp",
+      "TmuxNavigateRight",
+      "TmuxNavigatePrevious",
+      "TmuxNavigatorProcessList",
+    },
+  },
+  {
     "stevearc/conform.nvim",
     -- event = 'BufWritePre', -- uncomment for format on save
     opts = require "configs.conform",

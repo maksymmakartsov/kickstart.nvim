@@ -25,7 +25,7 @@ vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>", { de
 
 vim.keymap.set({ "n", "i", "v" }, "<C-s>", "<cmd>write<CR>", { desc = "[S]ave File" })
 
-vim.keymap.set("n", "<C-n>", "<cmd>set relativenumber!<CR>", { desc = "Toggle relative numbers" })
+vim.keymap.set("n", "<leader>tr", "<cmd>set relativenumber!<CR>", { desc = "[T]oggle [R]elative numbers" })
 
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
